@@ -19,14 +19,15 @@ else:
 for productId in myProductIdList:
 	try:
 		# open a connection
-		myUrl = requests.get("http://www.ows.newegg.com/Products.egg/N82E16823129045")
+		myUrl = requests.get("http://www.ows.newegg.com/Products.egg/%s" % productId)
 		pageJson = myUrl.json()
 
 		#{} is for default value instead of null
 		nameDesc = pageJson.get("Basic",{}).get("Title", {}).strip()
 		price = pageJson.get("Basic",{}).get("FinalPrice")
 
-		f.write(productId + "," + price.replace(",", "") + "," + time.strftime("%d/%m/%Y") + "," + nameDesc.replace(",", "|") + "\n")
+		csvValues = "%s,%s,%s,%s,\n" % (productId, price.replace(",", ""), time.strftime("%d/%m/%Y") , nameDesc.replace(",", "|"))
+		f.write(csvValues)
 
 		print("Name: " + nameDesc)
 		print("Price: " + price)
@@ -34,5 +35,4 @@ for productId in myProductIdList:
 	except Exception as e: 
 		print(e)
 #		pass
-
 f.close()
