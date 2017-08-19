@@ -1,10 +1,8 @@
-import os
 import time
 
 import requests
-import Product
 
-from database.ManageStorage import ManageStorage as storage
+import Product
 import database.StorageFactory as factory
 
 
@@ -35,6 +33,8 @@ class RetrieveData(object):
                 thisProduct.price = price
                 # save product info to dataSource
                 storageType.writeProduct(thisProduct)
+
+                # print values now for testing purposes
                 print("Name: " + nameDesc)
                 print("Price: " + price)
                 time.sleep(2)
