@@ -5,6 +5,7 @@ import requests
 import Product
 import database.StorageFactory as factory
 import websitesOnboard.WebsiteFactory as webFactory
+import schedule
 
 
 class RetrieveData(object):
@@ -41,4 +42,7 @@ class RetrieveData(object):
         storageType.closeConnection()
 
     if __name__ == '__main__':
-        retrieveData()
+        schedule.every(1).minutes.do(retrieveData)
+        while 1:
+            schedule.run_pending()
+            time.sleep(1)
