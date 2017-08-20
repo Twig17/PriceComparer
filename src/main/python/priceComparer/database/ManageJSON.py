@@ -43,6 +43,7 @@ class ManageJSON(ManageStorage):
         dataInfo = {}
         dataInfo['name'] = product.name
         dataInfo['productId'] = product.productId
+        dataInfo['imageUrl'] = product.imageLink
 
         priceData = {}
         priceData[time.strftime("%d/%m/%Y")] = product.price
@@ -58,7 +59,7 @@ class ManageJSON(ManageStorage):
     def modifyProduct(product):
         global data
         data[product.model][website]['prices']['20/08/2017'] = product.price
-        # loadedData[product.model]['prices'][time.strftime("%d/%m/%Y")] = product.price
+        # loadedData[product.model][website]['prices'][time.strftime("%d/%m/%Y")] = product.price
         jsonData = json.dumps(data)
         with open(filename, "w") as file:
             file.write(jsonData)

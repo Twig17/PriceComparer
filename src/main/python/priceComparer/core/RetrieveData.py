@@ -4,6 +4,7 @@ import requests
 
 import Product
 import database.StorageFactory as factory
+import websitesOnboard.WebsiteFactory as webFactory
 
 
 class RetrieveData(object):
@@ -20,34 +21,20 @@ class RetrieveData(object):
         for productId in myProductIdList:
             try:
                 thisProduct = Product
-                # open a connection
-                myUrl = requests.get("http://www.ows.newegg.com/Products.egg/%s" % productId)
-                pageJson = myUrl.json()
-
-                # {} is for default value instead of null
-                nameDesc = pageJson.get("Basic", {}).get("Title")
-                price = pageJson.get("Basic", {}).get("FinalPrice")
-                model = pageJson.get("Additional", {}).get("Model")
-                originalPrice = pageJson.get("Basic", {}).get("OriginalPrice")
-                rebate = pageJson.get("Basic", {}).get("RebateText")
-
                 thisProduct.productId = productId
-                thisProduct.name = nameDesc
-                thisProduct.model = model
-                allPrices = {}
-                allPrices['Original'] = originalPrice
-                allPrices['Rebate'] = rebate
-                allPrices['Final'] = price
-                thisProduct.price = allPrices
+                aWebsite = webFactory.chooseStorageType()
+                thisProduct = aWebsite.getDataProduct(thisProduct)
+
                 # save product info to dataSource
                 storageType.writeProduct(thisProduct)
 
                 # print values now for testing purposes
-                print("Name: " + nameDesc)
-                print("Price: " + price)
-                print("Model: " + model)
-                print("Original: " + originalPrice)
-                print("Rebate: " + rebate)
+                print("Name: " + thisProduct.name)
+                print("Price: " + thisProduct.price['Final'])
+                print("Model: " + thisProduct.model)
+                print("Original: " + thisProduct.price['Original'])
+                print("Rebate: " + thisProduct.price['Rebate'])
+                print("UrlLink: " + thisProduct.imageUrl)
                 time.sleep(2)
             except Exception as e:
                 print(e)
