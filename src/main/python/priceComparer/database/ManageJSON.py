@@ -7,6 +7,7 @@ from database.ManageStorage import ManageStorage
 filename = "../../../resources/productInfoJson.txt"
 file = None
 data = {}
+website = "Newegg"
 
 
 class ManageJSON(ManageStorage):
@@ -30,7 +31,7 @@ class ManageJSON(ManageStorage):
         global data
         # if node exists add the newest price else add new product node to json
         try:
-            data[product.id]
+            data[product.model]
             ManageJSON.modifyProduct(product)
         except KeyError as ke:
             ManageJSON.addProduct(product)
@@ -40,12 +41,15 @@ class ManageJSON(ManageStorage):
         global data
 
         dataInfo = {}
-        dataInfo['name'] = 'product name'  # product.name
+        dataInfo['name'] = product.name
+        dataInfo['productId'] = product.productId
 
         priceData = {}
         priceData[time.strftime("%d/%m/%Y")] = product.price
         dataInfo['prices'] = priceData
-        data[product.id] = dataInfo
+        websiteInfo = {}
+        websiteInfo[website] = dataInfo
+        data[product.model] = websiteInfo
 
         jsonData = json.dumps(data)
         with open(filename, "w") as file:
@@ -53,8 +57,8 @@ class ManageJSON(ManageStorage):
 
     def modifyProduct(product):
         global data
-        data[product.id]['prices']['20/08/2017'] = '$17'
-        # loadedData[product.id]['prices'][time.strftime("%d/%m/%Y")] = product.price
+        data[product.model][website]['prices']['20/08/2017'] = product.price
+        # loadedData[product.model]['prices'][time.strftime("%d/%m/%Y")] = product.price
         jsonData = json.dumps(data)
         with open(filename, "w") as file:
             file.write(jsonData)
