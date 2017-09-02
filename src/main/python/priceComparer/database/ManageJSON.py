@@ -4,9 +4,11 @@ import time
 
 from database.ManageStorage import ManageStorage
 
-filename = "../../../resources/productInfoJson.txt"
+filename = os.path.join(os.path.split(__file__)[0], "../../../resources/productInfoJson.json")
+productsFilename = os.path.join(os.path.split(__file__)[0], "../../../resources/NeweggProductIds.json")
 file = None
 data = {}
+currentDate = None
 website = "Newegg"
 
 
@@ -14,14 +16,16 @@ class ManageJSON(ManageStorage):
     def setup():
         global file
         global data
-        if (file is None):
-            if (os.path.exists(filename)) and (os.stat(filename).st_size != 0) :
-                file = open(filename, 'r')
-                loadedData = file.read()
-                data = json.loads(loadedData)
-            else:
-                file = open(filename, 'w')
-                data = {}
+        global currentDate
+
+        currentDate = time.strftime("%d/%m/%Y %H:%M")
+        if (os.path.exists(filename)) and (os.stat(filename).st_size != 0) :
+            file = open(filename, 'r')
+            loadedData = file.read()
+            data = json.loads(loadedData)
+        else:
+            file = open(filename, 'w')
+            data = {}
 
     def closeConnection():
         global file
@@ -39,6 +43,7 @@ class ManageJSON(ManageStorage):
     def addProduct(product):
         global file
         global data
+        global currentDate
 
         dataInfo = {}
         dataInfo['name'] = product.name
@@ -46,7 +51,7 @@ class ManageJSON(ManageStorage):
         dataInfo['imageUrl'] = product.imageLink
 
         priceData = {}
-        priceData[time.strftime("%d/%m/%Y")] = product.price
+        priceData[currentDate] = product.price
         dataInfo['prices'] = priceData
         websiteInfo = {}
         websiteInfo[website] = dataInfo
@@ -58,8 +63,19 @@ class ManageJSON(ManageStorage):
 
     def modifyProduct(product):
         global data
-        data[product.model][website]['prices']['20/08/2017'] = product.price
-        # loadedData[product.model][website]['prices'][time.strftime("%d/%m/%Y")] = product.price
+        global currentDate
+
+        # data[product.model][website]['prices']['21/08/2017'] = product.price
+        data[product.model][website]['prices'][currentDate] = product.price
         jsonData = json.dumps(data)
         with open(filename, "w") as file:
             file.write(jsonData)
+
+    def getAllProductIds():
+        if (os.path.exists(productsFilename)) and (os.stat(productsFilename).st_size != 0) :
+            productsFile = open(productsFilename, 'r')
+            allProductIds = productsFile.read()
+            productData = json.loads(allProductIds)
+            return productData['ids'].keys()
+        else:
+            return {}

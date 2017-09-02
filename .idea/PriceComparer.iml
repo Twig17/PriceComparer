@@ -8,6 +8,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/python/priceComparer" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/python/priceComparer/core" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/python/frontEnd" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/python/priceComparer/database" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/python/priceComparer/websitesOnboard" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
