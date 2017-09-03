@@ -65,7 +65,6 @@ class ManageJSON(ManageStorage):
         global data
         global currentDate
 
-        # data[product.model][website]['prices']['21/08/2017'] = product.price
         data[product.model][website]['prices'][currentDate] = product.price
         jsonData = json.dumps(data)
         with open(filename, "w") as file:

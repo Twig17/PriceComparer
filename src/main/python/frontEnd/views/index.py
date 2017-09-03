@@ -1,19 +1,21 @@
 from flask import Blueprint, render_template
 import glob
+import json
 
 bp = Blueprint(__name__, __name__, template_folder='templates')
 
 
 def fetch_notes():
-        final_notes = []
-        notes = glob.glob('frontEnd/notes/*.note')
+        final_products = []
+        productFileList = glob.glob('frontEnd/notes/productInfoJson.json')
+        with open(productFileList[0]) as _file:
+            jsonData = json.loads(_file.read())
 
-        for note in notes:
-            with open(note) as _file:
-                final_notes.append(_file.read())
-            _file.close()
+        for model in jsonData.keys():
+            final_products.append(model)
 
-        return final_notes
+        _file.close()
+        return final_products
 
 
 @bp.route('/')

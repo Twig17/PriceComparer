@@ -43,7 +43,6 @@ class RetrieveData(object):
 
     if __name__ == '__main__':
         schedule.every(.1).minutes.do(retrieveData)
-        # schedule.every(1).day.do(retrieveData)
         while 1:
             schedule.run_pending()
             time.sleep(1)

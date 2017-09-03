@@ -15,7 +15,7 @@ def run_schedule():
         time.sleep(1)
 
 if __name__ == '__main__':
-    schedule.every(10).seconds.do(run_every_10_seconds)
+    schedule.every(10).seconds.do(RetrieveData.retrieveData)
     t = Thread(target=run_schedule)
     t.start()
     print ('Start time: ' + str(time.time()))
