@@ -6,6 +6,6 @@ type = "JSON"
 
 def chooseStorageType():
     if(type == "CSV"):
-        return csvStorage
+        return csvStorage()
     if (type == "JSON"):
-        return jsonStorage
+        return jsonStorage()

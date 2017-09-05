@@ -9,25 +9,25 @@ file = None
 
 class ManageCSV(ManageStorage):
 
+    def __init__(self):
+        self.file = None
+
     def setup():
-        global file
-        if(file is None):
+        if(self.file is None):
             if os.path.exists(filename):
-                file = open(filename, 'a')
+                self.file = open(filename, 'a')
             else:
-                file = open(filename, 'w')
+                self.file = open(filename, 'w')
                 headers = "ProductId,Price,Date,Name\n"
-                file.write(headers)
+                self.file.write(headers)
 
     def closeConnection():
-        global file
-        file.close
+        self.file.close
 
     def writeProduct(product):
-        global file
         csvValues = "%s,%s,%s,%s,\n" % (
             product.id, product.price.replace(",", ""), time.strftime("%d/%m/%Y"), product.name.replace(",", "|"))
-        file.write(csvValues)
+        self.file.write(csvValues)
         print("Wrote to csv file")
 
 

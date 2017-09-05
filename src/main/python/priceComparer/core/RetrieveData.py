@@ -1,5 +1,5 @@
 import time
-
+import traceback
 import requests
 
 import Product
@@ -33,8 +33,8 @@ class RetrieveData(object):
                      thisProduct.price['Original'], thisProduct.price['Rebate'], thisProduct.imageLink)
                 print(displayValues)
                 time.sleep(1)
-            except Exception as e:
-                print(e)
+            except:
+                print(traceback.format_exc())
         storageType.closeConnection()
 
     def print_date_time():

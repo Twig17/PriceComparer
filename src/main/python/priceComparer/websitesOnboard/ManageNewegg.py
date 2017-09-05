@@ -2,6 +2,7 @@ from websitesOnboard.ManageWebsites import ManageWebsites
 import json
 import requests
 
+
 class ManageNewegg(ManageWebsites):
 
     def getDataProduct(product):
@@ -17,6 +18,7 @@ class ManageNewegg(ManageWebsites):
         imageUrl = pageJson.get("Basic", {}).get("ItemImages", {})[0].get("PathSize640", {})
 
         product.name = nameDesc
+        product.productDetailList = nameDesc
         product.model = model
         product.imageLink = imageUrl
         allPrices = {}

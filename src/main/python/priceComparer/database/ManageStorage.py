@@ -19,3 +19,7 @@ class ManageStorage(object):
     @abc.abstractmethod
     def getAllProductIds():
         return
+
+    @abc.abstractmethod
+    def getProduct(productModel):
+        return

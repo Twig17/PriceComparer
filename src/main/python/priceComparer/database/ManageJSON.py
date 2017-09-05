@@ -4,75 +4,67 @@ import time
 
 from database.ManageStorage import ManageStorage
 
-filename = os.path.join(os.path.split(__file__)[0], "../../../resources/productInfoJson.json")
-productsFilename = os.path.join(os.path.split(__file__)[0], "../../../resources/NeweggProductIds.json")
-file = None
-data = {}
-currentDate = None
-website = "Newegg"
+productInfoFileName = os.path.join(os.path.split(__file__)[0], "../../../resources/productInfoJson.json")
+allNeweggProductIdsFilename = os.path.join(os.path.split(__file__)[0], "../../../resources/NeweggProductIds.json")
 
 
 class ManageJSON(ManageStorage):
-    def setup():
-        global file
-        global data
-        global currentDate
 
-        currentDate = time.strftime("%d/%m/%Y %H:%M")
-        if (os.path.exists(filename)) and (os.stat(filename).st_size != 0) :
-            file = open(filename, 'r')
-            loadedData = file.read()
-            data = json.loads(loadedData)
+    def __init__(self):
+        self.website = "Newegg"
+        self.file = None
+        self.data = {}
+        self.currentDate = None
+
+    def setup(self):
+
+        self.currentDate = time.strftime("%d/%m/%Y %H:%M")
+        if (os.path.exists(productInfoFileName)) and (os.stat(productInfoFileName).st_size != 0) :
+            self.file = open(productInfoFileName, 'r')
+            loadedData = self.file.read()
+            self.data = json.loads(loadedData)
         else:
-            file = open(filename, 'w')
-            data = {}
+            self.file = open(productInfoFileName, 'w')
+            self.data = {}
 
-    def closeConnection():
-        global file
-        file.close
+    def closeConnection(self):
+        self.file.close
 
-    def writeProduct(product):
-        global data
+    def writeProduct(self, product):
         # if node exists add the newest price else add new product node to json
         try:
-            data[product.model]
-            ManageJSON.modifyProduct(product)
+            self.data[product.model]
+            self.modifyProduct(product)
         except KeyError as ke:
-            ManageJSON.addProduct(product)
+            self.addProduct(product)
 
-    def addProduct(product):
-        global file
-        global data
-        global currentDate
-
+    def addProduct(self, product):
         dataInfo = {}
         dataInfo['name'] = product.name
         dataInfo['productId'] = product.productId
         dataInfo['imageUrl'] = product.imageLink
 
         priceData = {}
-        priceData[currentDate] = product.price
+        priceData[self.currentDate] = product.price
         dataInfo['prices'] = priceData
         websiteInfo = {}
-        websiteInfo[website] = dataInfo
-        data[product.model] = websiteInfo
+        websiteInfo[self.website] = dataInfo
+        self.data[product.model] = websiteInfo
 
         jsonData = json.dumps(data)
-        with open(filename, "w") as file:
+        with open(productInfoFileName, "w") as file:
             file.write(jsonData)
 
-    def modifyProduct(product):
-        global data
-        global currentDate
+    def modifyProduct(self, product):
 
-        data[product.model][website]['prices'][currentDate] = product.price
-        jsonData = json.dumps(data)
-        with open(filename, "w") as file:
-            file.write(jsonData)
+        self.data[product.model][self.website]['prices'][self.currentDate] = product.price
+        jsonData = json.dumps(self.data)
+        with open(productInfoFileName, "w") as self.file:
+            self.file.write(jsonData)
 
-    def getAllProductIds():
-        if (os.path.exists(productsFilename)) and (os.stat(productsFilename).st_size != 0) :
-            productsFile = open(productsFilename, 'r')
+    def getAllProductIds(self):
+        if (os.path.exists(allNeweggProductIdsFilename)) and (os.stat(allNeweggProductIdsFilename).st_size != 0) :
+            productsFile = open(allNeweggProductIdsFilename, 'r')
             allProductIds = productsFile.read()
             productData = json.loads(allProductIds)
             return productData['ids'].keys()
