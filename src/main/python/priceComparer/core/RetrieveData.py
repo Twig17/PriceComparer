@@ -28,9 +28,8 @@ class RetrieveData(object):
                 storageType.writeProduct(thisProduct)
 
                 # print values now for testing purposes
-                displayValues = "Name: %s \nPrice: %s\nModel: %s\nOriginal: %s\nRebate: %s\nUrlLink: %s\n" %\
-                    (thisProduct.name, thisProduct.price['Final'], thisProduct.model,
-                     thisProduct.price['Original'], thisProduct.price['Rebate'], thisProduct.imageLink)
+                displayValues = "Name: %s\nModel:%s\n" %\
+                    (thisProduct.name, thisProduct.model)
                 print(displayValues)
                 time.sleep(1)
             except:

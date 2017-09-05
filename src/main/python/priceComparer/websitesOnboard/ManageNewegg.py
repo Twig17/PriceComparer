@@ -1,11 +1,17 @@
 from websitesOnboard.ManageWebsites import ManageWebsites
+import core.Dates as Dates
 import json
+import time
 import requests
 
 
 class ManageNewegg(ManageWebsites):
 
-    def getDataProduct(product):
+    def __init__(self):
+        self.websiteName = 'Newegg'
+
+    def getDataProduct(self, product):
+        currentDate = time.strftime("%d/%m/%Y %H:%M")
         websiteUrl = requests.get("http://www.ows.newegg.com/Products.egg/%s" % product.productId)
         pageJson = websiteUrl.json()
 
@@ -18,12 +24,13 @@ class ManageNewegg(ManageWebsites):
         imageUrl = pageJson.get("Basic", {}).get("ItemImages", {})[0].get("PathSize640", {})
 
         product.name = nameDesc
-        product.productDetailList = nameDesc
         product.model = model
         product.imageLink = imageUrl
-        allPrices = {}
-        allPrices['Original'] = originalPrice
-        allPrices['Rebate'] = rebate
-        allPrices['Final'] = price
-        product.price = allPrices
+        datePriceInfo = Dates
+        datePriceInfo.date = currentDate
+        datePriceInfo.original = originalPrice
+        datePriceInfo.rebate = rebate
+        datePriceInfo.final = price
+        product.detailsList = {}
+        product.detailsList[self.websiteName] = {datePriceInfo}
         return product

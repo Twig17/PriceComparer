@@ -44,20 +44,21 @@ class ManageJSON(ManageStorage):
         dataInfo['productId'] = product.productId
         dataInfo['imageUrl'] = product.imageLink
 
-        priceData = {}
-        priceData[self.currentDate] = product.price
-        dataInfo['prices'] = priceData
+        priceData = product.detailsList[self.website]
+        dateObject = next(iter(priceData))
+        dataInfo['prices'] = __createJson(dateObject)
         websiteInfo = {}
         websiteInfo[self.website] = dataInfo
         self.data[product.model] = websiteInfo
 
-        jsonData = json.dumps(data)
+        jsonData = json.dumps(self.data)
         with open(productInfoFileName, "w") as file:
             file.write(jsonData)
 
     def modifyProduct(self, product):
-
-        self.data[product.model][self.website]['prices'][self.currentDate] = product.price
+        priceData = product.detailsList[self.website]
+        dateObject = next(iter(priceData))
+        self.data[product.model][self.website]['prices'][self.currentDate] = self.__createDateJson(dateObject)
         jsonData = json.dumps(self.data)
         with open(productInfoFileName, "w") as self.file:
             self.file.write(jsonData)
@@ -70,3 +71,11 @@ class ManageJSON(ManageStorage):
             return productData['ids'].keys()
         else:
             return {}
+
+    def __createDateJson(self, dateObject):
+        jsonPriceData = {}
+        jsonPriceData[dateObject.date] = {}
+        jsonPriceData[dateObject.date]['Original'] = dateObject.original
+        jsonPriceData[dateObject.date]['Rebate'] = dateObject.rebate
+        jsonPriceData[dateObject.date]['Final'] = dateObject.final
+        return jsonPriceData

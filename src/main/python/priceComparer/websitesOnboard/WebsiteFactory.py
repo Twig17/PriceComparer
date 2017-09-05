@@ -5,4 +5,4 @@ type = "Newegg"
 
 def chooseStorageType():
     if(type == "Newegg"):
-        return newegg
+        return newegg()
