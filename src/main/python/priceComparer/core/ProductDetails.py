@@ -1,4 +1,4 @@
-class Product(object):
+class ProductDetails(object):
 
     def __init__(self, productId, name, price, imageLink):
         self.productId = productId

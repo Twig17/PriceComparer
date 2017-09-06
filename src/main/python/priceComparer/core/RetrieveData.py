@@ -20,16 +20,15 @@ class RetrieveData(object):
         for productId in myProductIdList:
             try:
                 thisProduct = Product
-                thisProduct.productId = productId
                 aWebsite = webFactory.chooseStorageType()
-                thisProduct = aWebsite.getDataProduct(thisProduct)
+                thisProduct = aWebsite.getDataProduct(productId)
 
                 # save product info to dataSource
                 storageType.writeProduct(thisProduct)
 
                 # print values now for testing purposes
                 displayValues = "Name: %s\nModel:%s\n" %\
-                    (thisProduct.name, thisProduct.model)
+                    (thisProduct.detailsList['Newegg'].name, thisProduct.model)
                 print(displayValues)
                 time.sleep(1)
             except:

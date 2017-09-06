@@ -1,4 +1,4 @@
-class Product(object):
+class Date(object):
 
     def __init__(self, date, original, rebate, final):
         self.date = date
